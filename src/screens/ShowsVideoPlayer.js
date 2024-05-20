@@ -148,7 +148,7 @@ export default function ShowsVideoPlayer({ route }) {
 
     const handleVideoPressed = () => {
         setVideoPressed(!videoPressed)
-        // SystemNavigationBar.fullScreen(true);
+        SystemNavigationBar.fullScreen(true);
     }
 
     const handlePlayVideo = () => {
