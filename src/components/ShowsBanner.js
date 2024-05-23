@@ -8,7 +8,7 @@ import { addShowsToMylist, removeShowFromMylist, showsMyList } from '../api/myli
 import { getLatestWatchedEpisodeID } from '../api/userShowsWatchtimeAPI';
 import { useNavigation } from '@react-navigation/native';
 
-const ShowsBanner = ({ showsList, ShowMylist, updateUserShowMylist }) => {
+const ShowsBanner = ({ showsList, ShowMylist, updateUserShowMylist, isTablet }) => {
     const navigation = useNavigation();
     const [userShowMylist, setUserShowMylist] = useState(ShowMylist);
 
@@ -98,23 +98,23 @@ const ShowsBanner = ({ showsList, ShowMylist, updateUserShowMylist }) => {
         <TouchableOpacity onPress={() => handleBanner(item)}>
             <ImageBackground source={{ uri: item.posterPath }} style={styles.posterImage} resizeMode="cover">
                 <TouchableOpacity style={styles.transparentButton} onPress={() => moveToMovieScreen()}>
-                    <Text style={styles.buttonText}>Movies</Text>
+                    <Text style={[styles.buttonText, {fontSize: isTablet ? responsiveFontSize(1.5) : responsiveFontSize(2)}]}>Movies</Text>
                 </TouchableOpacity>
                 <LinearGradient colors={['rgba(0,0,0,0.1)', 'rgba(0,0,0,1)']} style={styles.linearGradient}>
                     <TouchableOpacity key={item} style={styles.myListButton} onPress={() => addToList(item)}>
                         {userShowMylist.includes(item._id) ? (
-                            <Icon name="checkcircle" size={30} color="lightgreen" />
+                            <Icon name="checkcircle" size={isTablet ? 50 : 30} color="lightgreen" />
                         ) : (
-                            <Icon name="plus" size={30} color="white" />
+                            <Icon name="plus" size={isTablet ? 50 : 30} color="white" />
                         )}
                         <Text style={styles.myListText}>My List</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.posterPlayButton} onPress={() => posterPlayButton(item)}>
-                        <EntypoIcon name="controller-play" size={30} color="black" />
+                    <TouchableOpacity style={[styles.posterPlayButton, {justifyContent: isTablet ? 'center': 'none', width: isTablet ? responsiveWidth(20) : responsiveWidth(25),}]} onPress={() => posterPlayButton(item)}>
+                        <EntypoIcon name="controller-play" size={isTablet ? 50 : 30} color="black" />
                         <Text style={styles.playText}>Play</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.posterInfoButton} onPress={() => posterInfoButton(item)}>
-                        <Icon name="infocirlceo" size={30} color="white" />
+                        <Icon name="infocirlceo" size={isTablet ? 50 : 30} color="white" />
                         <Text style={styles.infoButtonTxt}>Info</Text>
                     </TouchableOpacity>
                 </LinearGradient>
@@ -123,7 +123,7 @@ const ShowsBanner = ({ showsList, ShowMylist, updateUserShowMylist }) => {
     );
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { height: isTablet ? responsiveHeight(100) : responsiveHeight(70) }]}>
             <FlatList
                 pagingEnabled
                 data={showsList}
@@ -138,7 +138,7 @@ const ShowsBanner = ({ showsList, ShowMylist, updateUserShowMylist }) => {
 
 const styles = StyleSheet.create({
     container: {
-        height: responsiveHeight(70),
+        // height: responsiveHeight(70),
         width: '100%',
     },
     posterImage: {
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
         padding: 8,
         backgroundColor: 'white',
         borderRadius: responsiveWidth(2),
-        width: responsiveWidth(25),
+        // width: responsiveWidth(25),
     },
     playText: {
         color: 'black',
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'white',
-        fontSize: responsiveFontSize(2),
+        // fontSize: responsiveFontSize(2),
         fontWeight: 'bold',
 
     },

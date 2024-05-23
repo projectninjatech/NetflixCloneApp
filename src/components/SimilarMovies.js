@@ -1,7 +1,7 @@
 import { TouchableOpacity, Image, FlatList, StyleSheet, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
-const SimilarMovies = ({ similarMoviesList }) => {
+const SimilarMovies = ({ similarMoviesList, isTablet }) => {
 
     const navigation = useNavigation();
 
@@ -15,10 +15,8 @@ const SimilarMovies = ({ similarMoviesList }) => {
                 data={similarMoviesList.slice(0, 8)}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => (
-                    <TouchableOpacity
-                        onPress={() => handleSimilarMovies(item)}
-                    >
-                        <Image source={{ uri: item.posterPath }} style={styles.moviePoster} />
+                    <TouchableOpacity onPress={() => handleSimilarMovies(item)}>
+                        <Image source={{ uri: item.posterPath }} style={[styles.moviePoster, {width: isTablet ? 280 : 180, height: isTablet ? 320 : 250}]} />
                     </TouchableOpacity>
                 )}
                 numColumns={2}
@@ -27,7 +25,6 @@ const SimilarMovies = ({ similarMoviesList }) => {
                 scrollEnabled={false}
             />
         </ScrollView>
-
     )
 }
 
@@ -38,17 +35,17 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         flexDirection: 'column',
         marginVertical: 10,
-        marginBottom:50,
+        marginBottom: 50,
         flex: 1,
     },
     moviePoster: {
-        width: 180,
-        height: 250,
+        // width: 180,
+        // height: 250,
         marginRight: 15,
         marginBottom: 15,
         borderRadius: 10,
         resizeMode: 'cover'
-        
+
     },
 })
 

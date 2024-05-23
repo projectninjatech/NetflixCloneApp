@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/dist/AntDesign';
 import { movieSearchAPI } from '../api/MovieSearchAPI';
 import SearchMovieList from '../components/SearchMovieList';
 import { moviesListAPI } from '../api/moviesList';
+import DeviceInfo from 'react-native-device-info';
 
 // Movie Search Screen
 export default function SearchScreen() {
@@ -11,11 +12,15 @@ export default function SearchScreen() {
     const [searchText, setSearchText] = React.useState('');
     const [searchResults, setSearchResults] = React.useState([]);
     const [moviesList, setmoviesList] = React.useState([])
+    const [isTablet, setIsTablet] = React.useState(false)
 
     React.useEffect(() => {
         const apiCall = async () => {
             const movies = await moviesListAPI();
             setmoviesList(movies)
+            if (DeviceInfo.getDeviceType() === "Tablet") {
+                setIsTablet(true)
+            }
         }
 
         apiCall();
@@ -56,7 +61,7 @@ export default function SearchScreen() {
                 ) : (
                     <View>
                         <Text style={styles.allMoviesLabel}>All Movies</Text>
-                        <SearchMovieList data={moviesList} />
+                        <SearchMovieList data={moviesList} isTablet={isTablet}/>
                     </View>
                 )}
             </ScrollView>

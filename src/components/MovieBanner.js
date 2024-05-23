@@ -8,11 +8,12 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { addMovieToList, removeMovieFromList } from '../api/mylistAPI';
 import { useNavigation } from '@react-navigation/native';
 
-const MovieBanner = ({ moviesList, mylist, handleBanner, posterPlayButton, posterInfoButton }) => {
+const MovieBanner = ({ moviesList, mylist, handleBanner, posterPlayButton, posterInfoButton, isTablet }) => {
 
     const navigation = useNavigation();
     const [userMylist, setUsermyList] = React.useState(mylist)
 
+    console.log("Tablet is",isTablet)
       const moveToShowsScreen = () => {
         navigation.navigate('ShowsTabNav')
     }
@@ -40,19 +41,19 @@ const MovieBanner = ({ moviesList, mylist, handleBanner, posterPlayButton, poste
         <TouchableOpacity onPress={() => handleBanner(item)}>
             <ImageBackground source={{ uri: item.posterPath }} style={styles.posterImage} resizeMode="cover">
                 <TouchableOpacity style={styles.transparentButton} onPress={() => moveToShowsScreen()}>
-                    <Text style={styles.buttonText}>TV Shows</Text>
+                    <Text style={[styles.buttonText, {fontSize: isTablet ? responsiveFontSize(1.5) : responsiveFontSize(2)}]}>TV Shows</Text>
                 </TouchableOpacity>
                 <LinearGradient colors={['rgba(0,0,0,0.1)', 'rgba(0,0,0,1)']} style={styles.linearGradient}>
                     <TouchableOpacity key={item} style={styles.myListButton} onPress={() => addToList(item)}>
-                        {userMylist.includes(item._id) ? (<Icon name="checkcircle" size={30} color="lightgreen" />) : (<Icon name="plus" size={30} color="white" />)}
+                        {userMylist.includes(item._id) ? (<Icon name="checkcircle" size={isTablet ? 50 : 30} color="lightgreen" />) : (<Icon name="plus" size={isTablet ? 50 : 30} color="white" />)}
                         <Text style={styles.myListText}>My List</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.posterPlayButton} onPress={() => posterPlayButton(item._id, item.downloadLink, item.title)}>
-                        <EntypoIcon name="controller-play" size={30} color="black" />
+                    <TouchableOpacity style={[styles.posterPlayButton, {justifyContent: isTablet ? 'center': 'none', width: isTablet ? responsiveWidth(20) : responsiveWidth(25),}]} onPress={() => posterPlayButton(item._id, item.downloadLink, item.title)}>
+                        <EntypoIcon name="controller-play" size={isTablet ? 50 : 30} color="black" />
                         <Text style={styles.playText}>Play</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.posterInfoButton} onPress={() => posterInfoButton(item)}>
-                        <Icon name="infocirlceo" size={30} color="white" />
+                        <Icon name="infocirlceo" size={isTablet ? 50 : 30} color="white" />
                         <Text style={styles.infoButtonTxt}>Info</Text>
                     </TouchableOpacity>
                 </LinearGradient>
@@ -61,7 +62,7 @@ const MovieBanner = ({ moviesList, mylist, handleBanner, posterPlayButton, poste
     );
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { height: isTablet ? responsiveHeight(100) : responsiveHeight(70) }]}>
             <FlatList
                 pagingEnabled
                 data={moviesList}
@@ -76,7 +77,7 @@ const MovieBanner = ({ moviesList, mylist, handleBanner, posterPlayButton, poste
 
 const styles = StyleSheet.create({
     container: {
-        height: responsiveHeight(70),
+        // height:  responsiveHeight(70),
         width: '100%',
     },
     posterImage: {
@@ -96,13 +97,13 @@ const styles = StyleSheet.create({
         padding: 8,
         backgroundColor: 'white',
         borderRadius: responsiveWidth(2),
-        width: responsiveWidth(25),
+        // width: responsiveWidth(25),
     },
     playText: {
         color: 'black',
         fontSize: responsiveFontSize(2),
         fontWeight: 'bold',
-        marginLeft: responsiveWidth(1.5)
+        marginLeft: responsiveWidth(1.5),
     },
     myListButton: {
         alignItems: 'center',
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
       },
       buttonText: {
         color: 'white',
-        fontSize: responsiveFontSize(2),
+        // fontSize: responsiveFontSize(2),
         fontWeight: 'bold',
         
     },

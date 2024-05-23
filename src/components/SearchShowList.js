@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const SearchShowList = ({ data }) => {
+const SearchShowList = ({ data, isTablet }) => {
 
   const navigation = useNavigation();
 
@@ -20,14 +20,14 @@ const SearchShowList = ({ data }) => {
     <View>
       <TouchableOpacity onPress={() => handleShowPress(item)}>
         <View style={styles.showContainer}>
-          <Image source={{ uri: item.posterPath }} style={styles.posterImage} />
+          <Image source={{ uri: item.posterPath }} style={[styles.posterImage, {width: isTablet ? 150 : 80, height: isTablet ? 200 : 120}]} />
           <View style={styles.showInfo}>
-            <Text style={styles.showName}>{item.name} ({formatReleaseDate(item.releaseDate)})</Text>
-            <Text style={styles.showName}>Ratings: {item.ratings}</Text>
+            <Text style={[styles.showName, {fontSize: isTablet ? 20 : 16}]}>{item.name} ({formatReleaseDate(item.releaseDate)})</Text>
+            <Text style={[styles.showName, {fontSize: isTablet ? 20 : 14}]}>Ratings: {item.ratings}</Text>
             <View style={styles.genreContainer}>
               {item.genres.map((genre, index) => (
                 <View key={index} style={styles.genreItem}>
-                  <Text style={styles.showGenres}>{genre}</Text>
+                  <Text style={[styles.showGenres, {fontSize: isTablet ? 20 : 14}]}>{genre}</Text>
                 </View>
               ))}
             </View>
@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#333',
   },
   posterImage: {
-    width: 80,
-    height: 120,
+    // width: 80,
+    // height: 120,
     marginRight: 10,
   },
   showInfo: {
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   showName: {
     color: 'white',
-    fontSize: 16,
+    // fontSize: 16,
     fontWeight:'bold'
   },
   genreContainer: {

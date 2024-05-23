@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const SearchMovieList = ({ data }) => {
+const SearchMovieList = ({ data, isTablet }) => {
 
   console.log("Total Movies are",data.length)
   const navigation = useNavigation();
@@ -29,17 +29,17 @@ const SearchMovieList = ({ data }) => {
     <View>
       <TouchableOpacity onPress={() => handleMoviePress(item)}>
         <View style={styles.movieContainer}>
-          <Image source={{ uri: item.posterPath }} style={styles.posterImage} />
+          <Image source={{ uri: item.posterPath }} style={[styles.posterImage, {width: isTablet ? 150 : 80, height: isTablet ? 200 : 120}]} />
           <View style={styles.movieInfo}>
-            <Text style={styles.movieTitle}>{item.title} ({formatReleaseDate(item.releaseDate)})</Text>
+            <Text style={[styles.movieTitle, {fontSize: isTablet ? 20 : 16}]}>{item.title} ({formatReleaseDate(item.releaseDate)})</Text>
             <View style={styles.genreContainer}>
               {item.genres.map((genre, index) => (
                 <View key={index} style={styles.genreItem}>
-                  <Text style={styles.movieGenres}>{genre}</Text>
+                  <Text style={[styles.movieGenres, {fontSize: isTablet ? 20 : 14}]}>{genre}</Text>
                 </View>
               ))}
             </View>
-            <Text style={styles.movieTitle}>{formatRuntime(item.runtime)}</Text>
+            <Text style={[styles.movieTitle, {fontSize: isTablet ? 20 : 14}]}>{formatRuntime(item.runtime)}</Text>
             {/* Additional movie information if needed */}
           </View>
         </View>
@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#333',
   },
   posterImage: {
-    width: 80,
-    height: 120,
+    // width: 80,
+    // height: 120,
     marginRight: 10,
   },
   movieInfo: {
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
   movieTitle: {
     color: 'white',
-    fontSize: 16,
+    // fontSize: 16,
     fontWeight:'bold'
   },
   movieGenres: {

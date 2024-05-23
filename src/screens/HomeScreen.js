@@ -9,18 +9,22 @@ import { useNavigation } from '@react-navigation/native';
 import MylistMovies from '../components/MylistMovies';
 import ContinueWatching from '../components/ContinueWatching';
 import { useFocusEffect } from '@react-navigation/native';
-
+import DeviceInfo from 'react-native-device-info';
 
 export default function HomeScreen({ route }) {
     const navigation = useNavigation();
     const [moviesList, setmoviesList] = React.useState([])
     const [mylist, setMylist] = React.useState(route.params.mylist);
     const [watchedMovies, setWatchedMovies] = React.useState(route.params.watchedMovies);
+    const [isTablet, setIsTablet] = React.useState(false)
 
     React.useEffect(() => {
         const apiCall = async () => {
             const movies = await moviesListAPI();
             setmoviesList(movies)
+            if (DeviceInfo.getDeviceType() === "Tablet") {
+                setIsTablet(true)
+            }
         }
 
         apiCall();
@@ -78,20 +82,21 @@ export default function HomeScreen({ route }) {
                     handleBanner={handleBanner}
                     posterPlayButton={posterPlayButton}
                     posterInfoButton={posterInfoButton} 
+                    isTablet={isTablet}
                     />
 
 
                 <View style={styles.subContainer}>
-                    {mylist.length != 0 && (<MylistMovies label={"My List"} mylist={mylist} />)}
+                    {mylist.length != 0 && (<MylistMovies label={"My List"} mylist={mylist} isTablet={isTablet}/>)}
 
-                    {watchedMovies.length != 0 && (<ContinueWatching label={"Continue Watching"} watchedMovieList={watchedMovies} />)}
+                    {watchedMovies.length != 0 && (<ContinueWatching label={"Continue Watching"} watchedMovieList={watchedMovies} isTablet={isTablet}/>)}
 
-                    <MovieCards genreID={"Netflix"} label={'Only on Netflix'} />
-                    <MovieCards genreID={35} label={'Comedy Movies'} />
-                    <MovieCards genreID={18} label={'Drama Movies'} />
-                    <MovieCards genreID={14} label={'Fantasy Movies'} />
-                    <MovieCards genreID={878} label={'Sci-Fi Movies'} />
-                    <MovieCards genreID={28} label={'Action Movies'} />
+                    <MovieCards genreID={"Netflix"} label={'Only on Netflix'} isTablet={isTablet}/>
+                    <MovieCards genreID={35} label={'Comedy Movies'} isTablet={isTablet}/>
+                    <MovieCards genreID={18} label={'Drama Movies'} isTablet={isTablet}/>
+                    <MovieCards genreID={14} label={'Fantasy Movies'} isTablet={isTablet}/>
+                    <MovieCards genreID={878} label={'Sci-Fi Movies'} isTablet={isTablet}/>
+                    <MovieCards genreID={28} label={'Action Movies'} isTablet={isTablet}/>
                 </View>
 
             </ScrollView>

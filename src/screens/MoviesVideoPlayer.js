@@ -15,6 +15,7 @@ import { setBrightnessLevel, getBrightnessLevel } from '@reeq/react-native-devic
 import AudioSubsModal from '../components/AudioSubsModal';
 import { PanGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
 import DoubleTap from '../components/DoubleTap';
+import DeviceInfo from 'react-native-device-info';
 
 
 export default function VideoPlayer({ route }) {
@@ -36,6 +37,7 @@ export default function VideoPlayer({ route }) {
     const [resizeMode, setResizeMode] = React.useState("cover");
     const [volume, setVolume] = React.useState(1);
     const [brightness, setBrightness] = React.useState(0.5);
+    const [isTablet, setIsTablet] = React.useState(false)
 
 
     const ref = React.useRef();
@@ -61,6 +63,9 @@ export default function VideoPlayer({ route }) {
         // Lock the orientation to landscape when the component mounts
         Orientation.lockToLandscape();
         SystemNavigationBar.fullScreen(true);
+        if (DeviceInfo.getDeviceType() === "Tablet") {
+            setIsTablet(true)
+        }
 
         return () => {
             // Unlock orientation and exit full screen when component unmounts
@@ -175,7 +180,9 @@ export default function VideoPlayer({ route }) {
         console.log("Videoplayer current time on the video", parseInt(progress.currentTime))
         handleUpdateMovieWatchtime(parseInt(progress.currentTime), movieID)
         navigation.goBack();
-        Orientation.lockToPortrait();
+        if(!isTablet) {
+            Orientation.lockToPortrait();
+        }
         SystemNavigationBar.fullScreen(false);
         handleExitVideoPlayerBrightness()
     }

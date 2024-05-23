@@ -8,16 +8,17 @@ import { useNavigation } from '@react-navigation/native';
 import { similarMoviesAPI } from '../api/similarMoviesAPI';
 import SimilarMovies from '../components/SimilarMovies';
 import MiniVideoplayer from '../components/MiniVideoplayer';
+import DeviceInfo from 'react-native-device-info';
 
 export default function MovieDetails({ route }) {
 
     const navigation = useNavigation();
     const { movie } = route.params;
 
-    console.log("Movie List",movie)
+    console.log("Movie List", movie)
 
     const [similarMoviesList, setSimilarMoviesList] = useState([]);
-
+    const [isTablet, setIsTablet] = React.useState(false)
 
     React.useEffect(() => {
         const similarMoviesListAPICall = async () => {
@@ -26,6 +27,9 @@ export default function MovieDetails({ route }) {
                 const similarMovies = await similarMoviesAPI(movie._id);
                 setSimilarMoviesList(similarMovies)
                 // console.log("Similar Movies", similarMovies);
+                if (DeviceInfo.getDeviceType() === "Tablet") {
+                    setIsTablet(true)
+                }
             } catch (error) {
                 console.error("Error fetching similar movies:", error);
             }
@@ -50,51 +54,51 @@ export default function MovieDetails({ route }) {
     }
 
     return (
-        <TouchableWithoutFeedback>
 
-            <ScrollView style={styles.container} >
-                <StatusBar translucent backgroundColor="transparent" />
-                <TouchableOpacity onPress={() => goBack()}>
-                    <Icon style={styles.backButton} name="arrowleft" size={30} color="white" />
-                </TouchableOpacity>
-
-                <MiniVideoplayer videoUri={movie.downloadLink} />
-
-                <View style={styles.movieDetailsContainer}>
-                    <Text style={styles.movieTitle}>{movie.title}</Text>
-                    <View style={styles.subDetailsContainer}>
-                        <Text style={styles.subDetails}>{new Date(movie.releaseDate).getFullYear()}   |   {formatRuntime(movie.runtime)}   |</Text><MI style={{ marginTop: 10, }} name="hd" size={20} color="white" />
-                    </View>
-                    <View style={styles.subDetailsContainer}>
-                        <MI style={{ marginTop: 10, }} name="speaker" size={20} color="white" /><Text style={styles.subDetails}>  English  |  Hindi</Text><MI style={{ marginTop: 10, }} name="subtitles" size={20} color="white" /><Text style={styles.subDetails}>  EN</Text>
-                    </View>
-                </View>
-
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.playButton} onPress={() => playMovie(movie._id, movie.downloadLink, movie.title)}>
-                        <FAIcon name="play" size={20} color="black" />
-                        <Text style={styles.playButtonText}>Play</Text>
+        <View style={[styles.container, {alignItems: isTablet ? 'center' : 'none'}]}>
+            <TouchableWithoutFeedback>
+                <ScrollView style={{width: isTablet ? '50%' : '100%'}}>
+                    <StatusBar translucent backgroundColor="transparent" />
+                    <TouchableOpacity onPress={() => goBack()}>
+                        <Icon style={styles.backButton} name="arrowleft" size={30} color="white" />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.downloadButton} onPress={() => console.log('Download button pressed')}>
-                        <FAIcon name="download" size={20} color="white" />
-                        <Text style={styles.downlaodButtonText}>Download</Text>
-                    </TouchableOpacity>
-                </View>
 
-                <View style={styles.detailsContainer}>
-                    <Text style={styles.overview}>{movie.overview}</Text>
-                    <Text style={styles.genresText}>Genre: {movie.genres.join('  |  ')}</Text>
-                </View>
+                    <MiniVideoplayer videoUri={movie.downloadLink} />
 
-                <View style={styles.similarMovieTxtContainer}>
-                    <Text style={styles.similarMovieTxt}>Similar Movies</Text>
-                </View>
+                    <View style={styles.movieDetailsContainer}>
+                        <Text style={styles.movieTitle}>{movie.title}</Text>
+                        <View style={styles.subDetailsContainer}>
+                            <Text style={styles.subDetails}>{new Date(movie.releaseDate).getFullYear()}   |   {formatRuntime(movie.runtime)}   |</Text><MI style={{ marginTop: 10, }} name="hd" size={20} color="white" />
+                        </View>
+                        <View style={styles.subDetailsContainer}>
+                            <MI style={{ marginTop: 10, }} name="speaker" size={20} color="white" /><Text style={styles.subDetails}>  English  |  Hindi</Text><MI style={{ marginTop: 10, }} name="subtitles" size={20} color="white" /><Text style={styles.subDetails}>  EN</Text>
+                        </View>
+                    </View>
 
-                <SimilarMovies similarMoviesList={similarMoviesList} />
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style={styles.playButton} onPress={() => playMovie(movie._id, movie.downloadLink, movie.title)}>
+                            <FAIcon name="play" size={20} color="black" />
+                            <Text style={styles.playButtonText}>Play</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.downloadButton} onPress={() => console.log('Download button pressed')}>
+                            <FAIcon name="download" size={20} color="white" />
+                            <Text style={styles.downlaodButtonText}>Download</Text>
+                        </TouchableOpacity>
+                    </View>
 
-            </ScrollView>
+                    <View style={styles.detailsContainer}>
+                        <Text style={styles.overview}>{movie.overview}</Text>
+                        <Text style={styles.genresText}>Genre: {movie.genres.join('  |  ')}</Text>
+                    </View>
 
-        </TouchableWithoutFeedback>
+                    <View style={styles.similarMovieTxtContainer}>
+                        <Text style={styles.similarMovieTxt}>Similar Movies</Text>
+                    </View>
+
+                    <SimilarMovies similarMoviesList={similarMoviesList} isTablet={isTablet} />
+                </ScrollView>
+            </TouchableWithoutFeedback>
+        </View>
     )
 }
 
@@ -103,6 +107,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#000',
         flex: 1,
     },
+
     backButton: {
         marginVertical: 40,
         marginHorizontal: 20

@@ -1,9 +1,10 @@
-import { View, Text, TextInput, StatusBar, TouchableOpacity, ScrollView, StyleSheet } from 'react-native'
+import { View, Text, TextInput, StatusBar, ScrollView, StyleSheet } from 'react-native'
 import React from 'react'
 import Icon from 'react-native-vector-icons/dist/AntDesign';
 import { getAllShows } from '../api/showsList';
 import { showsSearchAPI } from '../api/ShowsSearchAPI';
 import SearchShowList from '../components/SearchShowList';
+import DeviceInfo from 'react-native-device-info';
 
 // Shows search screen
 export default function ShowsSearchScreen() {
@@ -11,11 +12,15 @@ export default function ShowsSearchScreen() {
     const [searchText, setSearchText] = React.useState('');
     const [searchResults, setSearchResults] = React.useState([]);
     const [showsList, setShowsList] = React.useState([])
+    const [isTablet, setIsTablet] = React.useState(false)
 
     React.useEffect(() => {
         const apiCall = async () => {
             const shows = await getAllShows();
             setShowsList(shows)
+            if (DeviceInfo.getDeviceType() === "Tablet") {
+                setIsTablet(true)
+            }
         }
 
         apiCall();
@@ -54,7 +59,7 @@ export default function ShowsSearchScreen() {
                 ) : (
                     <View>
                         <Text style={styles.allShowsLabel}>All Shows</Text>
-                        <SearchShowList data={showsList} />
+                        <SearchShowList data={showsList} isTablet={isTablet}/>
                     </View>
                 )}
             </ScrollView>

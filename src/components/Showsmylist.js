@@ -1,10 +1,10 @@
 import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native'
-import { responsiveHeight as rh, responsiveWidth as rw, responsiveFontSize as rf } from "react-native-responsive-dimensions";
+import { responsiveFontSize as rf } from "react-native-responsive-dimensions";
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { showsMyList } from '../api/mylistAPI';
 
-const Showsmylist = ({ label, userShowMylist }) => {
+const Showsmylist = ({ label, userShowMylist, isTablet }) => {
 
   const navigation = useNavigation();
 
@@ -25,13 +25,13 @@ const Showsmylist = ({ label, userShowMylist }) => {
   }
 
   const renderShowCards = ({ item }) => (
-    <TouchableOpacity onPress={() => handleShowDetails(item)} style={styles.showCardContainer}>
-      <Image source={{ uri: item.posterPath }} style={styles.showCardImage} />
+    <TouchableOpacity onPress={() => handleShowDetails(item)} style={[styles.showCardContainer, {marginRight: isTablet ? 20 : 10}]}>
+      <Image source={{ uri: item.posterPath }} style={[styles.showCardImage, {width: isTablet ? 250 : 150}]} />
     </TouchableOpacity>
   )
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { height: isTablet ? 500 : 250 }]}>
       <Text style={styles.label}>{label}</Text>
       <FlatList data={showsList} keyExtractor={(item) => item._id} renderItem={renderShowCards} horizontal showsHorizontalScrollIndicator={false} />
     </View>
@@ -41,7 +41,7 @@ const Showsmylist = ({ label, userShowMylist }) => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 10,
-    height: 250,
+    // height: 250,
   },
   label: {
     paddingHorizontal: 20,
@@ -51,12 +51,12 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   showCardContainer: {
-    marginRight: 10,
+    // marginRight: 10,
     borderRadius: 20,
     paddingHorizontal:10
   },
   showCardImage: {
-    width: 150,
+    // width: 150,
     height: '100%',
     borderRadius: 10,
   }

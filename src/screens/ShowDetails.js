@@ -6,6 +6,7 @@ import MI from 'react-native-vector-icons/dist/MaterialIcons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import MiniVideoplayer from '../components/MiniVideoplayer';
 import EpisodeList from '../components/EpisodeList';
+import DeviceInfo from 'react-native-device-info';
 
 import { getLatestWatchedEpisodeID } from '../api/userShowsWatchtimeAPI';
 
@@ -19,10 +20,14 @@ export default function ShowDetails({ route }) {
     const [playOrResume, setPlayorResume] = React.useState("Play");
     const [resumeEpisodeLink, setResumeEpisodeLink] = React.useState(show.seasons[0].episodes[0].downloadLink);
     const [resumeEpisodeID, setResumeEpisodeID] = React.useState(show.seasons[0].episodes[0].episode);
+    const [isTablet, setIsTablet] = React.useState(false)
 
     useFocusEffect(
         React.useCallback(() => {
             const latestEpisodeWatchtime = async () => {
+                if (DeviceInfo.getDeviceType() === "Tablet") {
+                    setIsTablet(true)
+                  }
                 const latestWatchedEpisodeID = await getLatestWatchedEpisodeID(show._id);
                 setResumeEpisodeID(latestWatchedEpisodeID.episodeID);
                 for (const season of show.seasons) {
@@ -88,7 +93,8 @@ export default function ShowDetails({ route }) {
 
 
     return (
-        <ScrollView style={styles.container} >
+        <View style={[styles.container, {alignItems: isTablet ? 'center' : 'none'}]}>
+        <ScrollView style={{width: isTablet ? '50%' : '100%'}}>
 
             {show.length !== 0 && (
                 <Modal
@@ -131,7 +137,7 @@ export default function ShowDetails({ route }) {
             <View style={styles.showDetailsContainer}>
                 <Text style={styles.showTitle}>{show.name}</Text>
                 <View style={styles.subDetailsContainer}>
-                    <Text style={styles.subDetails}>{new Date(show.releaseDate).getFullYear()}   |</Text><MI style={{ marginTop: 10, }} name="hd" size={20} color="white" /><Text style={styles.subDetails}>   |    ⭐ {show.ratings}</Text>
+                    <Text style={styles.subDetails}>{new Date(show.releaseDate).getFullYear()}   |</Text><MI style={{ marginTop: 10 }} name="hd" size={20} color="white" /><Text style={styles.subDetails}>   |    ⭐ {show.ratings}</Text>
                 </View>
                 <View style={styles.subDetailsContainer}>
                     <MI style={{ marginTop: 10, }} name="speaker" size={20} color="white" /><Text style={styles.subDetails}>  English  |  Hindi</Text><MI style={{ marginTop: 10, }} name="subtitles" size={20} color="white" /><Text style={styles.subDetails}>  EN</Text>
@@ -159,8 +165,9 @@ export default function ShowDetails({ route }) {
                 </TouchableOpacity>
             )}
 
-            {show.length != 0 && (<EpisodeList episodesList={show.seasons[selectedSeasonIndex].episodes} />)}
+            {show.length != 0 && (<EpisodeList episodesList={show.seasons[selectedSeasonIndex].episodes} isTablet={isTablet}/>)}
         </ScrollView>
+        </View>
     )
 }
 
@@ -170,6 +177,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#000',
         flex: 1,
     },
+
     backButton: {
         marginVertical: 40,
         marginHorizontal: 20
@@ -186,6 +194,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: 'bold',
     },
+
     subDetailsContainer: {
         flexDirection: 'row',
     },
@@ -195,11 +204,13 @@ const styles = StyleSheet.create({
         fontSize: 15,
         marginRight: 15,
     },
+
     buttonContainer: {
         width: '95%',
         alignSelf: 'center',
         flexDirection: 'column',
     },
+
     playButton: {
         backgroundColor: 'white',
         padding: 15,
@@ -208,12 +219,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center'
     },
+
     playButtonText: {
         color: 'black',
         fontWeight: 'bold',
         fontSize: 16,
         marginLeft: 8
     },
+
     downloadButton: {
         backgroundColor: '#2D2D2D',
         padding: 15,
@@ -228,18 +241,21 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginLeft: 8
     },
+
     detailsContainer: {
         width: '95%',
         alignSelf: 'center',
         flexDirection: 'column',
         marginVertical: 5
     },
+
     overview: {
         color: 'white',
         fontSize: 12,
         marginVertical: 5
 
     },
+
     genresText: {
         color: 'white',
         fontWeight: 'bold',
@@ -252,6 +268,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginVertical: 10,
     },
+
     seasonButton: {
         color: 'white',
         fontWeight: 'bold',
@@ -259,32 +276,36 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
 
-
     modalContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'black',
     },
+
     seasonContainer:{
         width:'90%'
     },
+
     modalTitle: {
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 10,
         color: 'white',
     },
+
     modalItem: {
         padding: 10,
         backgroundColor: 'gray',
         borderRadius: 5,
         marginVertical: 5,
     },
+
     modalItemText: {
         color: 'white',
         fontSize: 16,
     },
+
     modalCloseButton: {
         backgroundColor: 'red',
         padding: 15,
@@ -292,6 +313,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         width: '90%',
     },
+
     modalCloseButtonText: {
         color: 'white',
         fontWeight: 'bold',

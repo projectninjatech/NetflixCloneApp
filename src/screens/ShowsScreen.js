@@ -8,6 +8,7 @@ import ShowsContinueWatching from '../components/ShowsContinueWatching';
 import { showsMyList } from '../api/mylistAPI';
 import Showsmylist from '../components/Showsmylist';
 import ShowCard from '../components/ShowCard';
+import DeviceInfo from 'react-native-device-info';
 
 export default function ShowsScreen() {
   const navigation = useNavigation();
@@ -16,12 +17,16 @@ export default function ShowsScreen() {
   const [userShowMylist, setuserShowMylist] = React.useState([])
   const [allGenres, setAllGenres] = React.useState([]);
   const [watchedShowlist, setWatchedShowlist] = React.useState([]);
+  const [isTablet, setIsTablet] = React.useState(false)
 
   console.log("Show screen user show list", userShowMylist)
   React.useEffect(() => {
     const apiCall = async () => {
       const shows = await getAllShows();
       setShowsList(shows)
+      if (DeviceInfo.getDeviceType() === "Tablet") {
+        setIsTablet(true)
+      }
     }
 
     apiCall();
@@ -76,12 +81,12 @@ export default function ShowsScreen() {
     <View style={styles.container}>
       <StatusBar translucent backgroundColor="transparent" />
       <ScrollView style={styles.scrollView}>
-        {showsList.length !== 0 && (<ShowsBanner showsList={showsList} ShowMylist={userShowMylist} updateUserShowMylist={updateUserShowMylist} />)}
-        {watchedShowlist.length !== 0 && (<ShowsContinueWatching label={"Continue Watching"} allshowsList={showsList} />)}
-        {userShowMylist.length != 0 && <Showsmylist label={"My list"} userShowMylist={userShowMylist} />}
+        {showsList.length !== 0 && (<ShowsBanner showsList={showsList} ShowMylist={userShowMylist} updateUserShowMylist={updateUserShowMylist} isTablet={isTablet}/>)}
+        {watchedShowlist.length !== 0 && (<ShowsContinueWatching label={"Continue Watching"} allshowsList={showsList} isTablet={isTablet}/>)}
+        {userShowMylist.length != 0 && <Showsmylist label={"My list"} userShowMylist={userShowMylist} isTablet={isTablet}/>}
 
         {allGenres.map((genre) => (
-          <ShowCard key={genre} genre={genre} showsList={showsList} handleShowDetails={handleShowDetails} />
+          <ShowCard key={genre} genre={genre} showsList={showsList} handleShowDetails={handleShowDetails} isTablet={isTablet}/>
         ))}
 
       </ScrollView>
@@ -95,7 +100,7 @@ const styles = StyleSheet.create({
     flex: 1,
 
   },
-  
+
   scrollView: {
     flex: 1,
     marginBottom: 20,

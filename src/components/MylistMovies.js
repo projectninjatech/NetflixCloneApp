@@ -4,7 +4,7 @@ import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { mylistAPI } from '../api/mylistAPI';
 
-const MylistMovies = ({ mylist, label }) => {
+const MylistMovies = ({ mylist, label, isTablet }) => {
 
   const navigation = useNavigation();
 
@@ -25,13 +25,13 @@ const MylistMovies = ({ mylist, label }) => {
 
   // console.log("Movie list is fetched", moviesList)
   const renderMovieCards = ({ item }) => (
-    <TouchableOpacity onPress={() => handleMovieDetails(item)} style={styles.movieCardContainer}>
-      <Image source={{ uri: item.posterPath }} style={styles.moviecardImage} />
+    <TouchableOpacity onPress={() => handleMovieDetails(item)} style={[styles.movieCardContainer, {marginRight: isTablet ? 20 : 10}]}>
+      <Image source={{ uri: item.posterPath }} style={[styles.moviecardImage, {width: isTablet ? 250 : 150}]} />
     </TouchableOpacity>
   )
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { height: isTablet ? 500 : 250 }]}>
       <Text style={styles.label}>{label}</Text>
       <FlatList data={moviesList} keyExtractor={(item) => item._id} renderItem={renderMovieCards} horizontal showsHorizontalScrollIndicator={false} />
     </View>
@@ -41,7 +41,7 @@ const MylistMovies = ({ mylist, label }) => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 10,
-    height: 250,
+    // height: 250,
   },
   label: {
     paddingHorizontal: 10,
@@ -51,11 +51,11 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   movieCardContainer: {
-    marginRight: 10,
+    // marginRight: 10,
     borderRadius: 20,
   },
   moviecardImage: {
-    width: 150,
+    // width: 150,
     height: '100%',
     borderRadius: 10,
   }

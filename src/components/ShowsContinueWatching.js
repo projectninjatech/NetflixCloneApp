@@ -8,7 +8,7 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { useFocusEffect } from '@react-navigation/native';
 import { getAllShowsWatchtime, removeShowWatchtime } from '../api/userShowsWatchtimeAPI';
 
-const ShowsContinueWatching = ({ allshowsList, label }) => {
+const ShowsContinueWatching = ({ allshowsList, label, isTablet }) => {
 
     const navigation = useNavigation();
 
@@ -82,9 +82,9 @@ const ShowsContinueWatching = ({ allshowsList, label }) => {
 
     
     const renderEpisodeCards = ({ item }) => (
-        <TouchableOpacity onPress={() => handleShowPlay(item.episodeInfo.episodeID, item.episodeInfo.episodeLink, item.episodeInfo.episodeName)} style={styles.showCardContainer}>
-            <Image source={{ uri: item.episodeInfo.showPoster }} style={styles.showCardImage} />
-            <View style={styles.progressbarContainer}>
+        <TouchableOpacity onPress={() => handleShowPlay(item.episodeInfo.episodeID, item.episodeInfo.episodeLink, item.episodeInfo.episodeName)} style={[styles.showCardContainer, {marginRight: isTablet ? 20 : 10}]}>
+            <Image source={{ uri: item.episodeInfo.showPoster }} style={[styles.showCardImage, {width: isTablet ? 250 : 150}]} />
+            <View style={[styles.progressbarContainer, { height: isTablet ? '15%' : '20%' }]}>
                 <Slider
                     style={styles.slider}
                     minimumValue={0}
@@ -97,26 +97,26 @@ const ShowsContinueWatching = ({ allshowsList, label }) => {
                 <TouchableOpacity>
                     <View style={styles.imageFooter}>
                         <TouchableOpacity onPress={() => handleInfoIconPress(item.episodeInfo.showId)}>
-                            <Icon name="info-circle" size={20} color="white" />
+                            <Icon name="info-circle" size={isTablet ? 40 : 20} color="white" />
                         </TouchableOpacity>
 
-                        <Text style={{ color: 'white' }}>S{item.episodeInfo.seasonNumber}:E{item.episodeInfo.episodeNumber}</Text>
+                        <Text style={{ color: 'white', fontSize: isTablet ? rf(1.2) : 14 }}>S{item.episodeInfo.seasonNumber}:E{item.episodeInfo.episodeNumber}</Text>
 
                         <TouchableOpacity onPress={() => handleCrossIconPress(item.episodeInfo.episodeID)}>
-                            <EntypoIcon name="cross" size={25} color="white" />
+                            <EntypoIcon name="cross" size={isTablet ? 50 : 25} color="white" />
                         </TouchableOpacity>
                     </View>
                 </TouchableOpacity>
 
             </View>
-            <Icon style={styles.playButton} name="play-circle" size={80} color="white" />
+            <Icon style={styles.playButton} name="play-circle" size={isTablet ? 120 : 80} color="white" />
         </TouchableOpacity>
     );
 
 
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { height: isTablet ? 500 : 250 }]}>
             <Text style={styles.label}>{label}</Text>
             <FlatList data={watchedShowsList} keyExtractor={(item) => item.id} renderItem={renderEpisodeCards} horizontal showsHorizontalScrollIndicator={false} />
         </View>
@@ -126,7 +126,7 @@ const ShowsContinueWatching = ({ allshowsList, label }) => {
 const styles = StyleSheet.create({
     container: {
         marginTop: 10,
-        height: 250,
+        // height: 250,
         marginVertical: 20,
         marginHorizontal:10,
     },
@@ -138,12 +138,12 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     showCardContainer: {
-        marginRight: 10,
+        // marginRight: 10,
         borderRadius: 20,
         position: 'relative',
     },
     showCardImage: {
-        width: 150,
+        // width: 150,
         height: '100%',
         borderRadius: 10,
         opacity: 0.85
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         width: '100%',
-        height: '20%',
+        // height: '20%',
         backgroundColor: '#343541',
 
     },
