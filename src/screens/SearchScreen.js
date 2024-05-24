@@ -60,7 +60,7 @@ export default function SearchScreen() {
                     <SearchMovieList data={searchResults} />
                 ) : (
                     <View>
-                        <Text style={styles.allMoviesLabel}>All Movies</Text>
+                        <Text style={styles.allMoviesLabel}>All Movies ({moviesList.length})</Text>
                         <SearchMovieList data={moviesList} isTablet={isTablet}/>
                     </View>
                 )}

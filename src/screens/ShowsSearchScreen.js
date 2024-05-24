@@ -58,7 +58,7 @@ export default function ShowsSearchScreen() {
                     <SearchShowList data={searchResults} />
                 ) : (
                     <View>
-                        <Text style={styles.allShowsLabel}>All Shows</Text>
+                        <Text style={styles.allShowsLabel}>All Shows ({showsList.length})</Text>
                         <SearchShowList data={showsList} isTablet={isTablet}/>
                     </View>
                 )}

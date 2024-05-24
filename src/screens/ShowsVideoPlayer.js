@@ -82,12 +82,14 @@ export default function ShowsVideoPlayer({ route }) {
 
         return () => {
             // Unlock orientation and exit full screen when component unmounts
-            Orientation.lockToPortrait();
-            SystemNavigationBar.fullScreen(false);
+            if (!isTablet) {
+                Orientation.lockToPortrait();
+                SystemNavigationBar.fullScreen(false);
+            }
             handleExitVideoPlayerBrightness()
         };
 
-    }, []);
+    }, [isTablet]);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -205,8 +207,8 @@ export default function ShowsVideoPlayer({ route }) {
         navigation.goBack();
         if (!isTablet) {
             Orientation.lockToPortrait();
+            SystemNavigationBar.fullScreen(false);
         }
-        SystemNavigationBar.fullScreen(false);
         handleExitVideoPlayerBrightness()
     }
 

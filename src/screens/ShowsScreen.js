@@ -32,6 +32,7 @@ export default function ShowsScreen() {
     apiCall();
   }, [])
 
+
   React.useEffect(() => {
     const fetchedWatchedShows = async () => {
       const allWatchedShows = await getAllShowsWatchtime();
@@ -81,12 +82,12 @@ export default function ShowsScreen() {
     <View style={styles.container}>
       <StatusBar translucent backgroundColor="transparent" />
       <ScrollView style={styles.scrollView}>
-        {showsList.length !== 0 && (<ShowsBanner showsList={showsList} ShowMylist={userShowMylist} updateUserShowMylist={updateUserShowMylist} isTablet={isTablet}/>)}
-        {watchedShowlist.length !== 0 && (<ShowsContinueWatching label={"Continue Watching"} allshowsList={showsList} isTablet={isTablet}/>)}
-        {userShowMylist.length != 0 && <Showsmylist label={"My list"} userShowMylist={userShowMylist} isTablet={isTablet}/>}
+        {showsList.length !== 0 && (<ShowsBanner showsList={showsList} ShowMylist={userShowMylist} updateUserShowMylist={updateUserShowMylist} isTablet={isTablet} />)}
+        {watchedShowlist.length !== 0 && (<ShowsContinueWatching label={"Continue Watching"} allshowsList={showsList} isTablet={isTablet} />)}
+        {userShowMylist.length != 0 && <Showsmylist label={"My list"} userShowMylist={userShowMylist} isTablet={isTablet} />}
 
         {allGenres.map((genre) => (
-          <ShowCard key={genre} genre={genre} showsList={showsList} handleShowDetails={handleShowDetails} isTablet={isTablet}/>
+          <ShowCard key={genre} genre={genre} showsList={showsList} handleShowDetails={handleShowDetails} isTablet={isTablet} />
         ))}
 
       </ScrollView>
@@ -98,7 +99,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#000',
     flex: 1,
-
   },
 
   scrollView: {

@@ -60,21 +60,27 @@ export default function VideoPlayer({ route }) {
     };
 
     React.useEffect(() => {
-        // Lock the orientation to landscape when the component mounts
-        Orientation.lockToLandscape();
-        SystemNavigationBar.fullScreen(true);
         if (DeviceInfo.getDeviceType() === "Tablet") {
             setIsTablet(true)
         }
+    }, [])
+
+    React.useEffect(() => {
+        // Lock the orientation to landscape when the component mounts
+        Orientation.lockToLandscape();
+        SystemNavigationBar.fullScreen(true);
 
         return () => {
             // Unlock orientation and exit full screen when component unmounts
-            Orientation.lockToPortrait();
-            SystemNavigationBar.fullScreen(false);
+            console.log("Device info is that", isTablet)
+            if (!isTablet) {
+                Orientation.lockToPortrait();
+                SystemNavigationBar.fullScreen(false);
+            }
             handleExitVideoPlayerBrightness()
         };
 
-    }, []);
+    }, [isTablet]);
 
 
     useFocusEffect(
@@ -164,7 +170,7 @@ export default function VideoPlayer({ route }) {
     const handleUpdateMovieWatchtime = async (watchedTime, movieID) => {
 
         if (!isNaN(watchedTime)) {
-           await updateWatchtime(watchedTime, movieID)
+            await updateWatchtime(watchedTime, movieID)
         }
     }
 
@@ -180,10 +186,11 @@ export default function VideoPlayer({ route }) {
         console.log("Videoplayer current time on the video", parseInt(progress.currentTime))
         handleUpdateMovieWatchtime(parseInt(progress.currentTime), movieID)
         navigation.goBack();
-        if(!isTablet) {
+        if (!isTablet) {
             Orientation.lockToPortrait();
+            SystemNavigationBar.fullScreen(false);
         }
-        SystemNavigationBar.fullScreen(false);
+
         handleExitVideoPlayerBrightness()
     }
 
@@ -230,7 +237,7 @@ export default function VideoPlayer({ route }) {
                         }}
                         backBufferDurationMs={15000}
                         onLoad={(videoInfo) => {
-                            console.log("Video Loaded...",videoInfo)
+                            console.log("Video Loaded...", videoInfo)
                             // console.log(videoInfo)
                             if (watchTime > 0) {
                                 ref.current.seek(watchTime);

@@ -21,6 +21,7 @@ export default function HomeScreen({ route }) {
     React.useEffect(() => {
         const apiCall = async () => {
             const movies = await moviesListAPI();
+            console.log("Movies list are as",movies)
             setmoviesList(movies)
             if (DeviceInfo.getDeviceType() === "Tablet") {
                 setIsTablet(true)
@@ -33,7 +34,7 @@ export default function HomeScreen({ route }) {
     React.useEffect(() => {
         const updateMylist = async () => {
             // You may need to fetch the updated mylist from your API here
-            console.log("Homescreen mylist has been updated")
+            // console.log("Homescreen mylist has been updated")
             const updatedMylist = await mylistAPI();
             setMylist(updatedMylist.moviesInMyList);
         };
@@ -44,8 +45,8 @@ export default function HomeScreen({ route }) {
 
 
 
-    console.log("Mylist length", mylist)
-    console.log("Watchmovies length", watchedMovies.length)
+    // console.log("Mylist length", mylist)
+    // console.log("Watchmovies length", watchedMovies.length)
 
     useFocusEffect(
         React.useCallback(() => {

@@ -5,7 +5,7 @@ import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react
 
 const ShowCard = ({ genre, showsList, handleShowDetails, isTablet }) => {
   // Filter shows based on the current genre
-  console.log("Showlist are", showsList)
+  // console.log("Showlist are", showsList)
   const filteredShows = showsList.filter((show) => show.genres.includes(genre));
 
   const renderShowCards = ({ item }) => (
@@ -30,7 +30,7 @@ const ShowCard = ({ genre, showsList, handleShowDetails, isTablet }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
+    marginTop: 20,
     // height: 250,
   },
   label: {

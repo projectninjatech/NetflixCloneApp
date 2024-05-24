@@ -1,6 +1,6 @@
 // MovieBanner.js
 import React from 'react';
-import { View, Text, ImageBackground, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import { View, Text, ImageBackground, Image, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -13,8 +13,8 @@ const MovieBanner = ({ moviesList, mylist, handleBanner, posterPlayButton, poste
     const navigation = useNavigation();
     const [userMylist, setUsermyList] = React.useState(mylist)
 
-    console.log("Tablet is",isTablet)
-      const moveToShowsScreen = () => {
+    console.log("Tablet is", isTablet)
+    const moveToShowsScreen = () => {
         navigation.navigate('ShowsTabNav')
     }
 
@@ -39,16 +39,19 @@ const MovieBanner = ({ moviesList, mylist, handleBanner, posterPlayButton, poste
 
     const renderMovieBanner = ({ item }) => (
         <TouchableOpacity onPress={() => handleBanner(item)}>
-            <ImageBackground source={{ uri: item.posterPath }} style={styles.posterImage} resizeMode="cover">
+            <ImageBackground source={{ uri: isTablet ? item.backdropPath : item.posterPath }} style={styles.posterImage} resizeMode="cover">
+                {isTablet && (<TouchableOpacity style={styles.tabletMoviePoster}>
+                    <Image source={{uri: item.posterPath}} style={{width:100, height:150}}/>
+                </TouchableOpacity>)}
                 <TouchableOpacity style={styles.transparentButton} onPress={() => moveToShowsScreen()}>
-                    <Text style={[styles.buttonText, {fontSize: isTablet ? responsiveFontSize(1.5) : responsiveFontSize(2)}]}>TV Shows</Text>
+                    <Text style={[styles.buttonText, { fontSize: isTablet ? responsiveFontSize(1.5) : responsiveFontSize(2) }]}>TV Shows</Text>
                 </TouchableOpacity>
                 <LinearGradient colors={['rgba(0,0,0,0.1)', 'rgba(0,0,0,1)']} style={styles.linearGradient}>
                     <TouchableOpacity key={item} style={styles.myListButton} onPress={() => addToList(item)}>
                         {userMylist.includes(item._id) ? (<Icon name="checkcircle" size={isTablet ? 50 : 30} color="lightgreen" />) : (<Icon name="plus" size={isTablet ? 50 : 30} color="white" />)}
                         <Text style={styles.myListText}>My List</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.posterPlayButton, {justifyContent: isTablet ? 'center': 'none', width: isTablet ? responsiveWidth(20) : responsiveWidth(25),}]} onPress={() => posterPlayButton(item._id, item.downloadLink, item.title)}>
+                    <TouchableOpacity style={[styles.posterPlayButton, { justifyContent: isTablet ? 'center' : 'none', width: isTablet ? responsiveWidth(20) : responsiveWidth(25), }]} onPress={() => posterPlayButton(item._id, item.downloadLink, item.title)}>
                         <EntypoIcon name="controller-play" size={isTablet ? 50 : 30} color="black" />
                         <Text style={styles.playText}>Play</Text>
                     </TouchableOpacity>
@@ -62,7 +65,7 @@ const MovieBanner = ({ moviesList, mylist, handleBanner, posterPlayButton, poste
     );
 
     return (
-        <View style={[styles.container, { height: isTablet ? responsiveHeight(100) : responsiveHeight(70) }]}>
+        <View style={[styles.container, { height: isTablet ? responsiveHeight(90) : responsiveHeight(70) }]}>
             <FlatList
                 pagingEnabled
                 data={moviesList}
@@ -133,12 +136,23 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: 'white',
         alignItems: 'center',
-      },
-      buttonText: {
+    },
+    tabletMoviePoster: {
+        position: 'absolute',
+        top: responsiveHeight(6),
+        left: responsiveWidth(3),
+        backgroundColor: 'red',
+        padding: 5,
+        borderRadius: 5,
+        borderWidth: 2,
+        borderColor: 'white',
+        alignItems: 'center',
+    },
+    buttonText: {
         color: 'white',
         // fontSize: responsiveFontSize(2),
         fontWeight: 'bold',
-        
+
     },
 });
 

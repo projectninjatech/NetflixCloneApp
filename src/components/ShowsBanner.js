@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ImageBackground, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import { View, Text, ImageBackground, Image, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -33,18 +33,18 @@ const ShowsBanner = ({ showsList, ShowMylist, updateUserShowMylist, isTablet }) 
     const posterPlayButton = async (show) => {
         try {
             const latestWatchedEpisodeID = await getLatestWatchedEpisodeID(show._id);
-    
+
             console.log("Show with episode id", show);
             console.log("Latest watched episode ID", latestWatchedEpisodeID.episodeID);
             let episodeID = latestWatchedEpisodeID.episodeID
             let episodeName = "";
             let episodeLink = "";
-    
+
             // Find the episode in the show's seasons
             if (episodeID != null) {
                 for (const season of show.seasons) {
                     const foundEpisode = season.episodes.find(episode => episode._id.toString() === latestWatchedEpisodeID.episodeID);
-        
+
                     if (foundEpisode) {
                         episodeName = foundEpisode.name;
                         episodeLink = foundEpisode.downloadLink
@@ -57,7 +57,7 @@ const ShowsBanner = ({ showsList, ShowMylist, updateUserShowMylist, isTablet }) 
                 episodeName = show.seasons[0].episodes[0].name
             }
 
-            navigation.navigate("ShowsVideoPlayer", {episodeID, episodeLink, episodeName})
+            navigation.navigate("ShowsVideoPlayer", { episodeID, episodeLink, episodeName })
 
 
         } catch (error) {
@@ -96,9 +96,12 @@ const ShowsBanner = ({ showsList, ShowMylist, updateUserShowMylist, isTablet }) 
 
     const renderShowsBanner = ({ item }) => (
         <TouchableOpacity onPress={() => handleBanner(item)}>
-            <ImageBackground source={{ uri: item.posterPath }} style={styles.posterImage} resizeMode="cover">
+            <ImageBackground source={{ uri: isTablet ? item.backdropPath : item.posterPath }} style={styles.posterImage} resizeMode="cover">
+                {isTablet && (<TouchableOpacity style={styles.tabletShowPoster}>
+                    <Image source={{ uri: item.posterPath }} style={{ width: 100, height: 150 }} />
+                </TouchableOpacity>)}
                 <TouchableOpacity style={styles.transparentButton} onPress={() => moveToMovieScreen()}>
-                    <Text style={[styles.buttonText, {fontSize: isTablet ? responsiveFontSize(1.5) : responsiveFontSize(2)}]}>Movies</Text>
+                    <Text style={[styles.buttonText, { fontSize: isTablet ? responsiveFontSize(1.5) : responsiveFontSize(2) }]}>Movies</Text>
                 </TouchableOpacity>
                 <LinearGradient colors={['rgba(0,0,0,0.1)', 'rgba(0,0,0,1)']} style={styles.linearGradient}>
                     <TouchableOpacity key={item} style={styles.myListButton} onPress={() => addToList(item)}>
@@ -109,7 +112,7 @@ const ShowsBanner = ({ showsList, ShowMylist, updateUserShowMylist, isTablet }) 
                         )}
                         <Text style={styles.myListText}>My List</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.posterPlayButton, {justifyContent: isTablet ? 'center': 'none', width: isTablet ? responsiveWidth(20) : responsiveWidth(25),}]} onPress={() => posterPlayButton(item)}>
+                    <TouchableOpacity style={[styles.posterPlayButton, { justifyContent: isTablet ? 'center' : 'none', width: isTablet ? responsiveWidth(20) : responsiveWidth(25), }]} onPress={() => posterPlayButton(item)}>
                         <EntypoIcon name="controller-play" size={isTablet ? 50 : 30} color="black" />
                         <Text style={styles.playText}>Play</Text>
                     </TouchableOpacity>
@@ -123,7 +126,7 @@ const ShowsBanner = ({ showsList, ShowMylist, updateUserShowMylist, isTablet }) 
     );
 
     return (
-        <View style={[styles.container, { height: isTablet ? responsiveHeight(100) : responsiveHeight(70) }]}>
+        <View style={[styles.container, { height: isTablet ? responsiveHeight(90) : responsiveHeight(70) }]}>
             <FlatList
                 pagingEnabled
                 data={showsList}
@@ -188,6 +191,17 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: responsiveHeight(6),
         right: responsiveWidth(3),
+        backgroundColor: 'red',
+        padding: 5,
+        borderRadius: 5,
+        borderWidth: 2,
+        borderColor: 'white',
+        alignItems: 'center',
+    },
+    tabletShowPoster: {
+        position: 'absolute',
+        top: responsiveHeight(6),
+        left: responsiveWidth(3),
         backgroundColor: 'red',
         padding: 5,
         borderRadius: 5,

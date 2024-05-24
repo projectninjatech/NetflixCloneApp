@@ -87,8 +87,8 @@ export default function MovieDetails({ route }) {
                     </View>
 
                     <View style={styles.detailsContainer}>
-                        <Text style={styles.overview}>{movie.overview}</Text>
-                        <Text style={styles.genresText}>Genre: {movie.genres.join('  |  ')}</Text>
+                        <Text style={[styles.overview, {fontSize: isTablet ? responsiveFontSize(1.1) : 12}]}>{movie.overview}</Text>
+                        <Text style={[styles.genresText, {fontSize: isTablet ? responsiveFontSize(1.2) : 15}]}>Genre: {movie.genres.join('  |  ')}</Text>
                     </View>
 
                     <View style={styles.similarMovieTxtContainer}>
@@ -174,14 +174,14 @@ const styles = StyleSheet.create({
     },
     overview: {
         color: 'white',
-        fontSize: 12,
+        // fontSize: 12,
         marginVertical: 5
 
     },
     genresText: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 15,
+        // fontSize: 15,
     },
 
     similarMovieTxtContainer: {

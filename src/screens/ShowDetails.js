@@ -9,12 +9,13 @@ import EpisodeList from '../components/EpisodeList';
 import DeviceInfo from 'react-native-device-info';
 
 import { getLatestWatchedEpisodeID } from '../api/userShowsWatchtimeAPI';
+import { responsiveFontSize } from 'react-native-responsive-dimensions';
 
 export default function ShowDetails({ route }) {
     const navigation = useNavigation();
     const { show } = route.params;
 
-    console.log("SHow details all the info",show)
+    console.log("Show details all the info",show)
     const [selectedSeasonIndex, setSelectedSeasonIndex] = React.useState(0);
     const [isModalVisible, setModalVisible] = React.useState(false);
     const [playOrResume, setPlayorResume] = React.useState("Play");
@@ -155,8 +156,8 @@ export default function ShowDetails({ route }) {
                 </TouchableOpacity>
             </View>
             <View style={styles.detailsContainer}>
-                <Text style={styles.overview}>{show.overview}</Text>
-                {show.length != 0 && (<Text style={styles.genresText}>Genre: {show.genres.join('  |  ')}</Text>)}
+                <Text style={[styles.overview, {fontSize: isTablet ? responsiveFontSize(1.2) : 12}]}>{show.overview}</Text>
+                {show.length != 0 && (<Text style={[styles.genresText, {fontSize: isTablet ? responsiveFontSize(1.2) : 15}]}>Genre: {show.genres.join('  |  ')}</Text>)}
             </View>
 
             {show.length !== 0 && (
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
 
     overview: {
         color: 'white',
-        fontSize: 12,
+        // fontSize: 12,
         marginVertical: 5
 
     },
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
     genresText: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 15,
+        // fontSize: 15,
     },
 
     seasonButtonContainer: {

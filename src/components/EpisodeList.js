@@ -15,11 +15,11 @@ const EpisodeItem = ({ episode, onPlayEpisode, isTabletValue }) => (
                 </View>
             </TouchableOpacity>
             <View style={styles.episodeDetails}>
-                <Text style={styles.episodeNumber}>{`${episode.episode_number}. ${episode.name}`}</Text>
-                <Text style={[styles.episodeName, {fontSize: isTabletValue ? responsiveFontSize(1.5) : responsiveFontSize(1.8),}]}>{episode.runtime} min</Text>
+                <Text style={[styles.episodeNumber, {fontSize: isTabletValue ? responsiveFontSize(1.4) : responsiveFontSize(2),}]}>{`${episode.episode_number}. ${episode.name}`}</Text>
+                <Text style={[styles.episodeName, {fontSize: isTabletValue ? responsiveFontSize(1.2) : responsiveFontSize(1.8),}]}>{episode.runtime} min</Text>
             </View>
         </View>
-        <Text style={styles.episodeOverview}>{episode.overview}</Text>
+        <Text style={[styles.episodeOverview, {fontSize: isTabletValue ? responsiveFontSize(1.2) : responsiveFontSize(1.5),}]}>{episode.overview}</Text>
     </View>
 );
 
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     },
     episodeNumber: {
         color: 'white',
-        fontSize: responsiveFontSize(2),
+        // fontSize: responsiveFontSize(2),
         fontWeight: 'bold',
     },
     episodeName: {
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     },
     episodeOverview: {
         color: 'white',
-        fontSize: responsiveFontSize(1.5),
+        // fontSize: responsiveFontSize(1.5),
     },
     playButtonContainer: {
         ...StyleSheet.absoluteFillObject,
