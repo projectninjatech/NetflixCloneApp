@@ -1,7 +1,7 @@
 import { View, StyleSheet, StatusBar, ScrollView } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { getAllShows, getAllgenres } from '../api/showsList';
+import { getAllShows, getAllShowsGenres } from '../api/showsList';
 import { getAllShowsWatchtime } from '../api/userShowsWatchtimeAPI';
 import ShowsBanner from '../components/ShowsBanner';
 import ShowsContinueWatching from '../components/ShowsContinueWatching';
@@ -19,9 +19,9 @@ export default function ShowsScreen() {
   const [watchedShowlist, setWatchedShowlist] = React.useState([]);
   const [isTablet, setIsTablet] = React.useState(false)
 
-  console.log("Show screen user show list", userShowMylist)
+  // console.log("Show screen user show list", userShowMylist)
   React.useEffect(() => {
-    const apiCall = async () => {
+    const showsListAPICall = async () => {
       const shows = await getAllShows();
       setShowsList(shows)
       if (DeviceInfo.getDeviceType() === "Tablet") {
@@ -29,7 +29,7 @@ export default function ShowsScreen() {
       }
     }
 
-    apiCall();
+    showsListAPICall();
   }, [])
 
 
@@ -47,7 +47,7 @@ export default function ShowsScreen() {
   React.useEffect(() => {
     const fetchAllGenres = async () => {
       // Fetch unique genres from your API
-      const response = await getAllgenres()
+      const response = await getAllShowsGenres()
       setAllGenres(response);
     };
 

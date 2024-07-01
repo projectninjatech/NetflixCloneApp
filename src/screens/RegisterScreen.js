@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { userRegisterAPI } from '../api/userRegisterAPI';
 
@@ -25,6 +25,8 @@ const RegisterScreen = () => {
 
     return (
         <View style={styles.container}>
+            <StatusBar translucent backgroundColor="transparent" />
+            <Image source={require('../assets/logo.png')} style={styles.logo} />
             <Text style={styles.title}>Sign Up</Text>
 
             <TextInput
@@ -58,6 +60,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#000000', // Dark background color
+    },
+    logo: {
+        width: 120,
+        height: 120,
+        marginBottom: 10,
     },
     title: {
         fontSize: 24,

@@ -10,13 +10,15 @@ import ShowsTabNav from './ShowsTabNav';
 import ShowDetails from '../screens/ShowDetails';
 import ShowsVideoPlayer from '../screens/ShowsVideoPlayer';
 import AddServerScreen from '../screens/AddServerScreen';
+import SplashScreen from '../screens/SplashScreen';
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='AddServerScreen' screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName='SplashScreen' screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen name="AddServerScreen" component={AddServerScreen} />
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />

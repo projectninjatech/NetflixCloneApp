@@ -20,7 +20,7 @@ export const getAllShows = async () => {
 };
 
 
-export const getAllgenres = async () => {
+export const getAllShowsGenres = async () => {
     const options = {
         method: 'GET',
         headers: {
@@ -28,7 +28,7 @@ export const getAllgenres = async () => {
         }
     };
 
-    const url = `${BASE_IP}/getAllGenres`
+    const url = `${BASE_IP}/getAllShowsGenres`
     
     try {
         const response = await fetch(url, options);

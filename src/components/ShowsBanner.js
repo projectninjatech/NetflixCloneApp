@@ -100,6 +100,9 @@ const ShowsBanner = ({ showsList, ShowMylist, updateUserShowMylist, isTablet }) 
                 {isTablet && (<TouchableOpacity style={styles.tabletShowPoster}>
                     <Image source={{ uri: item.posterPath }} style={{ width: 100, height: 150 }} />
                 </TouchableOpacity>)}
+                <View style={[styles.logoContainer, {display: isTablet ? 'none' : 'flex'}]}>
+                    <Image source={require('../assets/logo.png')} style={styles.logo} />
+                </View>
                 <TouchableOpacity style={styles.transparentButton} onPress={() => moveToMovieScreen()}>
                     <Text style={[styles.buttonText, { fontSize: isTablet ? responsiveFontSize(1.5) : responsiveFontSize(2) }]}>Movies</Text>
                 </TouchableOpacity>
@@ -143,6 +146,15 @@ const styles = StyleSheet.create({
     container: {
         // height: responsiveHeight(70),
         width: '100%',
+    },
+    logoContainer: {
+        position: 'absolute',
+        top: responsiveHeight(4),
+        left: responsiveWidth(3),
+    },
+    logo: {
+        width: 80,
+        height: 80
     },
     posterImage: {
         width: responsiveWidth(100),

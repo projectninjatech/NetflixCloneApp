@@ -35,10 +35,9 @@ export default function VideoPlayer({ route }) {
     const [isBuffering, setIsBuffering] = React.useState(true)
     const [watchTime, setWatchtime] = React.useState(0);
     const [resizeMode, setResizeMode] = React.useState("cover");
-    const [volume, setVolume] = React.useState(1);
+    const [volume, setVolume] = React.useState(0.5);
     const [brightness, setBrightness] = React.useState(0.5);
     const [isTablet, setIsTablet] = React.useState(false)
-
 
     const ref = React.useRef();
 
@@ -69,6 +68,9 @@ export default function VideoPlayer({ route }) {
         // Lock the orientation to landscape when the component mounts
         Orientation.lockToLandscape();
         SystemNavigationBar.fullScreen(true);
+        if (DeviceInfo.getDeviceType() === "Tablet") {
+            setIsTablet(true)
+        }
 
         return () => {
             // Unlock orientation and exit full screen when component unmounts
@@ -76,6 +78,7 @@ export default function VideoPlayer({ route }) {
             if (!isTablet) {
                 Orientation.lockToPortrait();
                 SystemNavigationBar.fullScreen(false);
+                console.log("Screen is portrait")
             }
             handleExitVideoPlayerBrightness()
         };
@@ -306,7 +309,7 @@ export default function VideoPlayer({ route }) {
                                     }
 
                                     <TouchableOpacity onPress={() => moveForward()}>
-                                        <Image source={require('../assets/forward.png')} style={{ width: 50, height: 50, tintColor: 'white' }} />
+                                        <Image source={require('../assets/forward.png')} style={{ width: 50, height: 50, tintColor: 'white', }} />
                                     </TouchableOpacity>
                                 </View>
                             ) : (

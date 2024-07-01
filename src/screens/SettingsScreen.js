@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import { userLogout } from '../api/userloginAPI';
 import { useNavigation } from '@react-navigation/native';
@@ -34,6 +34,7 @@ export default function SettingsScreen() {
 
     return (
         <View style={styles.container}>
+            <Image source={require('../assets/logo.png')} style={styles.logo} />
             <View style={styles.sliderContainer}>
                 <View style={styles.iconTextContainer}>
                     <Icon name="brightness-7" size={30} color="white" />
@@ -57,7 +58,7 @@ export default function SettingsScreen() {
             <TouchableOpacity style={[styles.button, { backgroundColor: '#EB1825', }]} onPress={handlelogout}>
                 <Text style={styles.buttonText}>Logout</Text>
             </TouchableOpacity>
-            <Text style={styles.infoText}>This app is developed by Imran Ansari @projectninjatech. It is built for educational purposes. Please note that the developer is not responsible for any unwanted use of the app and does not promote or endorse piracy of any content.</Text>
+            {/* <Text style={styles.infoText}>This app is developed by Imran Ansari @projectninjatech. It is built for educational purposes. Please note that the developer is not responsible for any unwanted use of the app and does not promote or endorse piracy of any content.</Text> */}
         </View>
     )
 }
@@ -68,6 +69,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    logo: {
+        width: 120,
+        height: 120,
     },
     button: {
         width: '80%',

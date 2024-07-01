@@ -7,7 +7,7 @@ import { moviesListAPI } from '../api/moviesList';
 import DeviceInfo from 'react-native-device-info';
 
 // Movie Search Screen
-export default function SearchScreen() {
+export default function MoviesSearchScreen() {
 
     const [searchText, setSearchText] = React.useState('');
     const [searchResults, setSearchResults] = React.useState([]);
@@ -15,7 +15,7 @@ export default function SearchScreen() {
     const [isTablet, setIsTablet] = React.useState(false)
 
     React.useEffect(() => {
-        const apiCall = async () => {
+        const moviesListAPICall = async () => {
             const movies = await moviesListAPI();
             setmoviesList(movies)
             if (DeviceInfo.getDeviceType() === "Tablet") {
@@ -23,10 +23,10 @@ export default function SearchScreen() {
             }
         }
 
-        apiCall();
+        moviesListAPICall();
     }, [])
 
-    console.log("Search Movie List", moviesList)
+    // console.log("Search Movie List", moviesList)
 
     const handleSearch = async (text) => {
         setSearchText(text);

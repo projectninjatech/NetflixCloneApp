@@ -531,7 +531,7 @@ var styles = StyleSheet.create({
     sliderContainer: {
         // backgroundColor: 'blue',
         width: '90%',
-        height: '25%',
+        height: '30%',
         flexDirection: 'row',
         position: 'absolute',
         bottom: 0,
@@ -544,11 +544,11 @@ var styles = StyleSheet.create({
     sliderProgressBar: {
         flex: 1,
         color: 'red',
-        bottom: 40
+        bottom: 30
     },
     sliderText: {
         color: 'white',
-        bottom: 40
+        bottom: 30
     },
 
 });

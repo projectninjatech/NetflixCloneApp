@@ -9,14 +9,14 @@ import { useFocusEffect } from '@react-navigation/native';
 
 export default function MiniVideoplayer({ videoUri, episodeID }) {
     const [isPaused, setIsPaused] = React.useState(true);
-    const [isMute, setIsMute] = React.useState(true);
+    const [isMute, setIsMute] = React.useState(false);
     const [showControls, setShowControls] = useState(true);
     const [progress, setProgress] = React.useState(0)
     const [isBuffering, setIsBuffering] = useState(true);
     const [watchTime, setWatchtime] = React.useState(0);
 
     const ref = React.useRef();
-    console.log("Mini video",episodeID)
+    // console.log("Mini video",episodeID)
 
     useFocusEffect(
         React.useCallback(() => {
@@ -84,7 +84,7 @@ export default function MiniVideoplayer({ videoUri, episodeID }) {
                 paused={isPaused}
                 resizeMode='cover'
                 onLoad={(videoInfo) => {
-                    console.log("Video Loaded...")
+                    console.log("Mini Videoplayer Loaded...",videoInfo)
                     // console.log(videoInfo)
                     if (watchTime > 0) {
                         ref.current.seek(watchTime);

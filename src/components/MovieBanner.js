@@ -13,7 +13,16 @@ const MovieBanner = ({ moviesList, mylist, handleBanner, posterPlayButton, poste
     const navigation = useNavigation();
     const [userMylist, setUsermyList] = React.useState(mylist)
 
-    console.log("Tablet is", isTablet)
+    // Fisher-Yates Shuffle Algorithm
+    const shuffleArray = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    };
+
+    console.log("Moviebanner Tablet is", isTablet)
     const moveToShowsScreen = () => {
         navigation.navigate('ShowsTabNav')
     }
@@ -41,8 +50,11 @@ const MovieBanner = ({ moviesList, mylist, handleBanner, posterPlayButton, poste
         <TouchableOpacity onPress={() => handleBanner(item)}>
             <ImageBackground source={{ uri: isTablet ? item.backdropPath : item.posterPath }} style={styles.posterImage} resizeMode="cover">
                 {isTablet && (<TouchableOpacity style={styles.tabletMoviePoster}>
-                    <Image source={{uri: item.posterPath}} style={{width:100, height:150}}/>
+                    <Image source={{ uri: item.posterPath }} style={{ width: 100, height: 150 }} />
                 </TouchableOpacity>)}
+                <View style={[styles.logoContainer, { display: isTablet ? 'none' : 'flex' }]}>
+                    <Image source={require('../assets/logo.png')} style={styles.logo} />
+                </View>
                 <TouchableOpacity style={styles.transparentButton} onPress={() => moveToShowsScreen()}>
                     <Text style={[styles.buttonText, { fontSize: isTablet ? responsiveFontSize(1.5) : responsiveFontSize(2) }]}>TV Shows</Text>
                 </TouchableOpacity>
@@ -82,6 +94,15 @@ const styles = StyleSheet.create({
     container: {
         // height:  responsiveHeight(70),
         width: '100%',
+    },
+    logoContainer: {
+        position: 'absolute',
+        top: responsiveHeight(4),
+        left: responsiveWidth(3),
+    },
+    logo: {
+        width: 80,
+        height: 80
     },
     posterImage: {
         width: responsiveWidth(100),

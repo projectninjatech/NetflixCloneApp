@@ -15,7 +15,7 @@ export default function MovieDetails({ route }) {
     const navigation = useNavigation();
     const { movie } = route.params;
 
-    console.log("Movie List", movie)
+    // console.log("Movie List", movie)
 
     const [similarMoviesList, setSimilarMoviesList] = useState([]);
     const [isTablet, setIsTablet] = React.useState(false)

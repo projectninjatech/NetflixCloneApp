@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, StatusBar, Image } from 'react-native';
 import { userloginAPI, checkAuthAPI } from '../api/userloginAPI';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,27 +10,28 @@ const LoginScreen = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    React.useEffect(() => {
-        const checkauthuser = async () => {
-            const response = await checkAuthAPI();
-            console.log("User auth", response)
-            if (response.authenticated) {
-                navigation.navigate('BottomTabNavigator', {
-                    screen: 'HomeScreen',
-                    params: { mylist: response.user.mylist, watchedMovies: response.user.watchedMovies,},
-                  });
-            }
-        }
+    // React.useEffect(() => {
+    //     const checkauthuser = async () => {
+    //         const response = await checkAuthAPI();
+    //         console.log("User auth", response)
+    //         if (response.authenticated) {
+    //             navigation.navigate('BottomTabNavigator', {
+    //                 screen: 'HomeScreen',
+    //                 params: { mylist: response.user.mylist, watchedMovies: response.user.watchedMovies,},
+    //               });
+    //         }
+    //     }
 
-        checkauthuser();
-    }, [])
+    //     checkauthuser();
+    // }, [])
 
 
     const handleLogin = async () => {
         console.log('Logging in with:', { username, password });
         const responseData = await userloginAPI(username, password);
         if (responseData.success === false) {
-            console.warn("Wrong username or password!")
+            // console.warn("Wrong username or password!")
+            Alert.alert("Authentication failed", "Wrong username or password!")
         } else if (responseData.success === true) {
             navigation.navigate('BottomTabNavigator', {
                 screen: 'HomeScreen',
@@ -50,6 +51,8 @@ const LoginScreen = () => {
 
     return (
         <View style={styles.container}>
+            <StatusBar translucent backgroundColor="transparent" />
+            <Image source={require('../assets/logo.png')} style={styles.logo} />
             <Text style={styles.title}>Sign In</Text>
 
             <TextInput
@@ -86,6 +89,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#000000', // Dark background color
+    },
+    logo: {
+        width: 120,
+        height: 120,
+        marginBottom: 10,
     },
     title: {
         fontSize: 24,

@@ -1,7 +1,8 @@
-import { View, StatusBar, ScrollView, StyleSheet } from 'react-native'
+import { View, StatusBar, ScrollView, StyleSheet, BackHandler, Alert } from 'react-native'
 import React from 'react'
 import { moviesListAPI } from '../api/moviesList'
 import { mylistAPI } from '../api/mylistAPI';
+import { getAllMoviesGenres } from '../api/moviesList';
 import { getAllWatchTimes } from '../api/userMovieWatchtimeAPI';
 import MovieBanner from '../components/MovieBanner';
 import MovieCards from '../components/MovieCards';
@@ -16,33 +17,94 @@ export default function HomeScreen({ route }) {
     const [moviesList, setmoviesList] = React.useState([])
     const [mylist, setMylist] = React.useState(route.params.mylist);
     const [watchedMovies, setWatchedMovies] = React.useState(route.params.watchedMovies);
+    const [allGenres, setAllGenres] = React.useState([]);
     const [isTablet, setIsTablet] = React.useState(false)
 
+    // useFocusEffect(
+    //     React.useCallback(() => {
+    //         const moviesListAPICall = async () => {
+    //             const movies = await moviesListAPI();
+    //             console.log("Movies list are as",movies)
+    //             setmoviesList(movies)
+    //             if (DeviceInfo.getDeviceType() === "Tablet") {
+    //                 setIsTablet(true)
+    //             }
+    //         }
+
+    //         moviesListAPICall();
+    //     }, [])
+    // )
+
     React.useEffect(() => {
-        const apiCall = async () => {
+        const moviesListAPICall = async () => {
             const movies = await moviesListAPI();
-            console.log("Movies list are as",movies)
+            console.log("Movies list are as", movies)
             setmoviesList(movies)
             if (DeviceInfo.getDeviceType() === "Tablet") {
                 setIsTablet(true)
             }
         }
 
-        apiCall();
+        moviesListAPICall();
     }, [])
 
+    useFocusEffect(
+        React.useCallback(() => {
+            const updateMylist = async () => {
+                const updatedMylist = await mylistAPI();
+                setMylist(updatedMylist.moviesInMyList);
+            };
+
+            updateMylist();
+        }, [route.params.mylist])
+    )
+
     React.useEffect(() => {
-        const updateMylist = async () => {
-            // You may need to fetch the updated mylist from your API here
-            // console.log("Homescreen mylist has been updated")
-            const updatedMylist = await mylistAPI();
-            setMylist(updatedMylist.moviesInMyList);
+        const fetchAllGenres = async () => {
+            // Fetch unique genres from your API
+            const response = await getAllMoviesGenres()
+            setAllGenres(response);
         };
 
-        updateMylist();
-    }, [route.params.mylist])
+        fetchAllGenres();
+    }, []);
+
+    console.log("Movies genres are", allGenres)
+
+    // React.useEffect(() => {
+    //     const updateMylist = async () => {
+    //         // You may need to fetch the updated mylist from your API here
+    //         // console.log("Homescreen mylist has been updated")
+    //         const updatedMylist = await mylistAPI();
+    //         setMylist(updatedMylist.moviesInMyList);
+    //     };
+
+    //     updateMylist();
+    // }, [route.params.mylist])
 
 
+    useFocusEffect(
+        React.useCallback(() => {
+            const backAction = () => {
+                Alert.alert("Hold on!", "Are you sure you want to exit the app?", [
+                    {
+                        text: "Cancel",
+                        onPress: () => null,
+                        style: "cancel"
+                    },
+                    { text: "YES", onPress: () => BackHandler.exitApp() }
+                ]);
+                return true;
+            };
+
+            const backHandler = BackHandler.addEventListener(
+                "hardwareBackPress",
+                backAction
+            );
+
+            return () => backHandler.remove();
+        }, []) // Empty dependency array means this effect runs once when the screen is focused
+    );
 
 
     // console.log("Mylist length", mylist)
@@ -73,6 +135,10 @@ export default function HomeScreen({ route }) {
         navigation.navigate('MovieDetails', { movie });
     }
 
+    const handleMovieDetails = (movie) => {
+        navigation.navigate('MovieDetails', { movie });
+    }
+
     return (
         <View style={styles.container}>
             <StatusBar translucent backgroundColor="transparent" />
@@ -82,22 +148,26 @@ export default function HomeScreen({ route }) {
                     mylist={mylist}
                     handleBanner={handleBanner}
                     posterPlayButton={posterPlayButton}
-                    posterInfoButton={posterInfoButton} 
+                    posterInfoButton={posterInfoButton}
                     isTablet={isTablet}
-                    />
+                />
 
 
                 <View style={styles.subContainer}>
-                    {mylist.length != 0 && (<MylistMovies label={"My List"} mylist={mylist} isTablet={isTablet}/>)}
+                    {mylist.length != 0 && (<MylistMovies label={"My List"} mylist={mylist} isTablet={isTablet} />)}
 
-                    {watchedMovies.length != 0 && (<ContinueWatching label={"Continue Watching"} watchedMovieList={watchedMovies} isTablet={isTablet}/>)}
+                    {watchedMovies.length != 0 && (<ContinueWatching label={"Continue Watching"} watchedMovieList={watchedMovies} isTablet={isTablet} />)}
 
-                    <MovieCards genreID={"Netflix"} label={'Only on Netflix'} isTablet={isTablet}/>
-                    <MovieCards genreID={35} label={'Comedy Movies'} isTablet={isTablet}/>
+                    {/* <MovieCards genreID={"Netflix"} label={'Trending Movies'} isTablet={isTablet} /> */}
+                    {/* <MovieCards genreID={35} label={'Comedy Movies'} isTablet={isTablet}/>
                     <MovieCards genreID={18} label={'Drama Movies'} isTablet={isTablet}/>
                     <MovieCards genreID={14} label={'Fantasy Movies'} isTablet={isTablet}/>
                     <MovieCards genreID={878} label={'Sci-Fi Movies'} isTablet={isTablet}/>
-                    <MovieCards genreID={28} label={'Action Movies'} isTablet={isTablet}/>
+                    <MovieCards genreID={28} label={'Action Movies'} isTablet={isTablet}/> */}
+
+                    {allGenres.map((genre) => (
+                        <MovieCards key={genre} genre={genre} moviesList={moviesList} handleMovieDetails={handleMovieDetails} isTablet={isTablet} />
+                    ))}
                 </View>
 
             </ScrollView>
@@ -117,5 +187,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         gap: 10,
         marginTop: 20,
+        marginBottom:20
     },
 })
